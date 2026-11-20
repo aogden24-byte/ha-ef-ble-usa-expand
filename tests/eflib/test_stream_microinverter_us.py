@@ -28,6 +28,7 @@ def _display_property_packet(**fields) -> Packet:
     ("serial", "expected"),
     [
         (b"N011XXXXXXXXX388", True),
+        (b"BK06XXXXXXXXX001", True),
         (b"BK01XXXXXXXXX001", False),
         (b"BK02XXXXXXXXX001", False),
     ],

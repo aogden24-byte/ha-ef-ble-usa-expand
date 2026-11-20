@@ -870,6 +870,7 @@ _SENSORS: Final[dict[str, SensorEntityDescription]] = {
     "ac_power_2_3": port_power("AC (2-3)"),
     "pv_power_{n}": port_power("PV ({n})", precision=1, indexed_range=range(1, 9)),
     "pv_power_sum": power(precision=1, translation_key="pv_power_sum"),
+    "external_pv_power": power(precision=1),
     # OCEAN Pro
     "home_load": power(precision=2),
     "sub_panel_load": power(precision=2),

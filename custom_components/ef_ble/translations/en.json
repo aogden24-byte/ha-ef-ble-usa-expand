@@ -1086,6 +1086,9 @@
       },
       "ac_c20_in_type": {
         "name": "AC C20 In Type"
+      },
+      "external_pv_power": {
+        "name": "External PV Inverter Power"
       }
     },
     "select": {

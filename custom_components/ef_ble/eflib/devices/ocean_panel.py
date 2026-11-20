@@ -35,6 +35,15 @@ class Device(V4ProtocolDevice):
     sub_panel_load = pb_field(pb.pow_sub_panel_load_w, pround(2))
     ev_load = pb_field(pb.pow_ev_load_w, pround(2))
     pv_power_sum = pb_field(pb.pow_get_pv_sum, pround(2))
+    # Power on circuits assigned "Third-party solar inverter" in the installer app. The
+    # panel omits it at zero (a net-consuming circuit reports nothing), like the
+    # circuit samples, so a frame without it means zero rather than "unchanged".
+    external_pv_power = pb_field(
+        pb.pow_exter_pv_inv_in_w,
+        TransformIfMissing[float, float](
+            lambda v: round(v, 2) if v is not None else 0.0
+        ),
+    )
 
     remaining_time_charging = pb_field(pb.cms_chg_rem_time)
     remaining_time_discharging = pb_field(pb.cms_dsg_rem_time)
@@ -44,6 +53,38 @@ class Device(V4ProtocolDevice):
     plugged_in_ac = pb_field(pb.plug_in_info_acp_charger_flag)
 
     inverter_frequency = pb_field(pb_rt.third_inv_offgrid_ctrl_freq_curr, pround(2))
+
+    # The panel relays the inverter's PV strings, so they stay available while the
+    # inverter's own BLE link is down. Same fields and layout as the OCEAN Pro: string 1
+    # has no index suffix, power comes in the display upload and voltage/current in the
+    # runtime upload.
+    pv_voltage_1 = pb_field(pb_rt.dt_pv_vol_current, pround(1))
+    pv_current_1 = pb_field(pb_rt.dt_pv_cur_current, pround(2))
+    pv_power_1 = pb_field(pb.dt_pv_pwr_current, pround(1))
+    pv_voltage = pb_field_group(
+        pb_rt.dt_pv2_vol_current,
+        match="dt_pv{n}_vol_current",
+        count=7,
+        start=2,
+        transform=pround(1),
+        name_template="pv_voltage_{n}",
+    )
+    pv_current = pb_field_group(
+        pb_rt.dt_pv2_cur_current,
+        match="dt_pv{n}_cur_current",
+        count=7,
+        start=2,
+        transform=pround(2),
+        name_template="pv_current_{n}",
+    )
+    pv_power = pb_field_group(
+        pb.dt_pv2_pwr_current,
+        match="dt_pv{n}_pwr_current",
+        count=7,
+        start=2,
+        transform=pround(1),
+        name_template="pv_power_{n}",
+    )
 
     circuit_power = pb_field_group(
         pb.load_ch1_sample_info.load_ch_power,

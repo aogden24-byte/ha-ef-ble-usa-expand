@@ -229,6 +229,9 @@
       },
       "battery_cycles": {
         "default": "mdi:counter"
+      },
+      "external_pv_power": {
+        "default": "mdi:solar-power-variant"
       }
     },
     "switch": {

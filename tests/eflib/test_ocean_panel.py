@@ -163,3 +163,42 @@ async def test_ocean_panel_registers_userid_once_on_time_request(
         for c in device._conn.send_packet.await_args_list
         if (c.args[0].cmd_set, c.args[0].cmd_id) == (0x35, 0xA8)
     ]
+
+
+def _telemetry(**fields) -> bytes:
+    return dev_apl_comm_pb2.DisplayPropertyUpload(**fields).SerializeToString()
+
+
+def test_ocean_panel_reports_external_pv_inverter_power(device):
+    device._parse_telemetry(
+        _telemetry(pow_exter_pv_inv_in_w=194.34, pow_get_sys_load=540.0)
+    )
+
+    assert device.external_pv_power == 194.34
+
+
+def test_ocean_panel_external_pv_reads_zero_when_the_panel_omits_it(device):
+    """The panel stops sending the field once the PV circuit turns net-consuming"""
+    device._parse_telemetry(
+        _telemetry(pow_exter_pv_inv_in_w=194.34, pow_get_sys_load=540.0)
+    )
+    device._parse_telemetry(_telemetry(pow_get_sys_load=2602.0))
+
+    assert device.external_pv_power == 0.0
+
+
+def test_ocean_panel_relays_inverter_pv_strings(device):
+    device._parse_telemetry(
+        _telemetry(dt_pv_pwr_current=2825.8, dt_pv2_pwr_current=2538.7)
+    )
+    device._parse_telemetry(
+        dev_apl_comm_pb2.RuntimePropertyUpload(
+            dt_pv_vol_current=307.0, dt_pv_cur_current=10.6, dt_pv8_vol_current=52.1
+        ).SerializeToString()
+    )
+
+    assert device.pv_power_1 == 2825.8
+    assert device.pv_power_2 == 2538.7
+    assert device.pv_voltage_1 == 307.0
+    assert device.pv_current_1 == 10.6
+    assert device.pv_voltage_8 == 52.1

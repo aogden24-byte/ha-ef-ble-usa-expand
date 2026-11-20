@@ -16,7 +16,9 @@ class Device(stream_microinverter.Device):
     into one MPPT look like on this hardware.
     """
 
-    SN_PREFIX = (b"N011",)
+    # `BK06` is the same four-input US unit; confirmed on a live device whose PV3 and
+    # PV4 report real power.
+    SN_PREFIX = (b"N011", b"BK06")
 
     pv_power_3 = pb_field(pb.pow_get_pv3, pround(2))
     pv_voltage_3 = pb_field(pb.plug_in_info_pv3_vol, pround(1))
