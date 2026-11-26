@@ -25,3 +25,5 @@ class Device(stream_microinverter.Device):
     pv_power_4 = pb_field(pb.pow_get_pv4, pround(2))
     pv_voltage_4 = pb_field(pb.plug_in_info_pv4_vol, pround(1))
     pv_current_4 = pb_field(pb.plug_in_info_pv4_amp, pround(2))
+
+    inverter_temperature = pb_field(pb.inv_ntc_temp3)

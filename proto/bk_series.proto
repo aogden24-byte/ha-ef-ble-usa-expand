@@ -424,6 +424,7 @@ message ConfigReadAck {
 }
 
 message DisplayPropertyUpload {
+  optional int32 inv_ntc_temp3 = 371;
   optional uint32 max_inv_input = 1281;
   optional uint32 max_inv_output = 1282;
   optional uint32 max_bp_input = 1283;

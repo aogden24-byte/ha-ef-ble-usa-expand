@@ -1,0 +1,15 @@
+Metadata-Version: 2.4
+Name: ha-ef-ble
+Version: 0.0.0
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
+Requires-Python: >=3.13
+License-File: LICENSE
+Requires-Dist: bleak
+Requires-Dist: bleak-retry-connector
+Requires-Dist: bluetooth-adapters
+Requires-Dist: ecdsa~=0.19
+Requires-Dist: protobuf>=6.30
+Requires-Dist: pycryptodome~=3.23
+Dynamic: license-file

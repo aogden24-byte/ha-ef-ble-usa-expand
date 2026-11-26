@@ -84,3 +84,9 @@ async def test_reports_all_four_pv_inputs(device):
     assert device.pv_current_3 == 7.08
     assert device.pv_voltage_4 == 29.1
     assert device.pv_current_4 == 3.45
+
+
+async def test_reports_inverter_temperature(device):
+    assert await device.data_parse(_display_property_packet(inv_ntc_temp3=24))
+
+    assert device.inverter_temperature == 24

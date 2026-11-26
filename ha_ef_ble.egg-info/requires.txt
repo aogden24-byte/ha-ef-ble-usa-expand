@@ -1,0 +1,6 @@
+bleak
+bleak-retry-connector
+bluetooth-adapters
+ecdsa~=0.19
+protobuf>=6.30
+pycryptodome~=3.23
